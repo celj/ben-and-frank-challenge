@@ -3,7 +3,11 @@ source('src/pkgs.R')
 knitr::opts_chunk$set(
     echo = FALSE,
     cache = FALSE,
-    fig.align = 'center'
+    dpi = 300,
+    fig.align = 'center',
+    fig.height = 8,
+    fig.width = 12,
+    out.width = '80%'
 )
 
 options(digits = 4)

@@ -5,35 +5,82 @@ date: '`r Sys.setlocale("LC_TIME", "es_ES"); format(Sys.time(), "%d de %B de %Y"
 output:
     ioslides_presentation:
         css: css/style.css
+        self_contained: true
         smaller: true
         widescreen: true
 ---
 
 ```{r setup, include=FALSE}
-source('src/config.R')
+source('src/plots.R')
 ```
 
-## R Markdown
+# Variables temporales {data-background=#000000}
 
-This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+## Ventas diarias
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
-
-## Slide with Bullets
-
-- Bullet 1
-- Bullet 2
-- Bullet 3
-
-## Slide with R Output
-
-```{r cars, echo = TRUE}
-summary(cars)
+```{r sales}
+sales
 ```
 
-## Slide with Plot
+## Ventas promedio por día de la semana
 
-```{r pressure}
-plot(pressure)
+```{r weekly}
+weekly
 ```
 
+## Ventas promedio por hora
+
+```{r hourly}
+hourly
+```
+
+## Ventas promedio por hora --- entresemana
+
+```{r hourly.workdays}
+hourly.workdays
+```
+
+## Ventas promedio por hora --- fin de semana
+
+```{r hourly.weekend, fig.height=9, fig.width=18, out.width='100%'}
+hourly.weekend
+```
+
+## Descripción de variables temporales
+
+En nuestro gráfico de ventas diarias es fácil observar el desempeño de cada una de las tiendas respecto al resto (su agregado). De esto podemos concluir, sin más, que la tienda A tiene ventas mayores a B, y B mayores a C.
+
+En términos generales, es claro el aumento en ventas sábados y domingos --- efecto similar al observado en nuestro gráfico de ventas promedio por día de la semana.
+
+## Heterogeneidad
+
+A pesar de poder observar horas pico en nuestro gráfico de ventas promedio por hora, no podemos asumir homogeneidad *a priori* para todos los días de la semana, puesto que --- dado el tipo de datos y horarios de consumo en general --- es poco probable que dicho supuesto se cumpla.
+
+Dicha heterogeneidad nos lleva a las siguientes observaciones:
+
+1. Sábado es el día de mayores ventas para todas las tiendas.
+2. Entre semana, martes, lunes y miércoles son los días con mayores ventas para las tiendas A, B y C respectivamente.
+3. En cuestión de horarios, podemos observar que, en la tienda A, hay mayor actividad de 13 a 14 horas, y de 17 a 18 horas (2 horas, aproximadamente); en la tienda B, de 12:30 a 13:30, y de 16 a 18:30 horas (3.5 horas, aproximadamente), y en la tienda C, momentos aislados de mayor actividad en las 13, 15, 17 y 19 horas. En términos marginales, la tienda B tiene mayor actividad en cuanto al volumen de sus ventas.
+
+Finalmente, es fácil observar que las tiendas A y B comparten características y siguen las mismas tendencias de crecimiento / estabilidad. Sin embargo, la tienda C tiene un comportamiento casi totalmente distinto.
+
+Estas conclusiones nos permiten introducir nuestros datos a modelos de causalidad para conocer los efectos potenciales de futuras alternativas y propuestas para aumentar ventas y mejorar la experiencia del cliente.
+
+# Variables categóricas {data-background=#000000}
+
+## Métodos de pago
+
+```{r payment.method}
+payment.method
+```
+
+## Cancelaciones
+
+```{r cancelled.orders}
+pie(cancelled.props, labels = paste0(round(cancelled.props * 100, 2), '%'))
+legend('topleft', legend = c('órdenes canceladas', 'órdenes no canceladas'), fill =  c('white', 'lightblue'))
+```
+
+# Apéndice 1 --- limpieza de datos {data-background=#000000}
+
+# Apéndice 2 --- estructura de archivos {data-background=#000000}

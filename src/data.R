@@ -20,7 +20,7 @@ data$time <- with_tz(data$`Created_at (UTC)`,
                      tz = 'America/Mexico_City')
 data$cancelled <- ifelse(is.na(data$Total),
                          NA,
-                         ifelse(is.na(data$time),
+                         ifelse(is.na(data$`Cancelled at`),
                                 'no',
                                 'yes'))
 data$date <- as.Date(data$time)
@@ -36,3 +36,16 @@ days <- as.numeric(difftime(max(data$date),
                             units = 'days'))
 
 weeks <- days / 7
+
+payment.method <- data |>
+    drop_na() |>
+    filter(`Payment Method` != 'manual') |>
+    group_by(`Payment Method`) |>
+    summarise(sales_volume = sum(Total)) |>
+    kable(col.names = c('Método de pago', 'Volumen de ventas'),
+          align = 'cc',
+          format.args = list(big.mark = ','))
+
+cancelled.props <-
+    c(length(which(data$cancelled == 'yes')) / length(which(!is.na(data$cancelled))),
+      length(which(data$cancelled == 'no')) / length(which(!is.na(data$cancelled))))

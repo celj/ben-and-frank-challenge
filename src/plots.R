@@ -10,7 +10,7 @@ sales <- data |>
              stat = 'identity',
              position = 'stack') +
     scale_x_date(date_breaks = '1 week', date_labels =  '%e %b') +
-    scale_y_continuous(breaks = seq(0, 360000, by = 20000),
+    scale_y_continuous(breaks = seq(0, 360000, by = 25000),
                        labels = scales::dollar_format()) +
     labs(x = 'Fecha',
          y = 'Ventas') +
@@ -93,7 +93,7 @@ hourly <- data |>
         color = Location
     )) +
     scale_x_continuous(breaks = seq(0, 24, by = 1)) +
-    scale_y_continuous(breaks = seq(0, 20000, by = 1000),
+    scale_y_continuous(breaks = seq(0, 20000, by = 2000),
                        labels = scales::dollar_format()) +
     labs(x = 'Hora',
          y = NULL) +
@@ -115,25 +115,23 @@ hourly_daily <- function (x) {
             color = Location
         )) +
         scale_x_continuous(breaks = seq(0, 24, by = 1)) +
-        scale_y_continuous(breaks = seq(0, 50000, by = 2000),
+        scale_y_continuous(breaks = seq(0, 50000, by = 2500),
                            labels = scales::dollar_format()) +
         labs(x = 'Hora',
              y = NULL,
              title = x) +
         theme(legend.title = element_blank(),
-              legend.position = 'top') +
+              legend.position = 'left') +
         coord_polar()
 }
 
 hourly.per.day <- lapply(week, hourly_daily)
 
 # weekly.A / weekly.B / weekly.C
-sales
-weekly
-hourly
+# sales
+# weekly
+# hourly
 
 hourly.workdays <- (hourly.per.day[[1]] + hourly.per.day[[2]]) /
     (hourly.per.day[[3]] + hourly.per.day[[4]])
-hourly.weekends <- hourly.per.day[[5]] +
-    hourly.per.day[[6]] +
-    hourly.per.day[[7]]
+hourly.weekend <- hourly.per.day[[5]] | hourly.per.day[[6]] | hourly.per.day[[7]]
