@@ -6,4 +6,5 @@ pacman::p_load(rmarkdown,
                tidymodels,
                tidyverse,
                knitr,
-               lubridate)
+               lubridate,
+               patchwork)

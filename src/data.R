@@ -31,6 +31,8 @@ data$weekday <-
 
 data <- subset(data, select = -`Cancelled at`)
 
-weeks <- as.numeric(difftime(max(data$date),
-                             (min(data$date)),
-                             units = 'weeks'))
+days <- as.numeric(difftime(max(data$date),
+                            (min(data$date)),
+                            units = 'days'))
+
+weeks <- days / 7
