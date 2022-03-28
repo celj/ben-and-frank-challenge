@@ -81,6 +81,20 @@ pie(cancelled.props, labels = paste0(round(cancelled.props * 100, 2), '%'))
 legend('topleft', legend = c('órdenes canceladas', 'órdenes no canceladas'), fill =  c('white', 'lightblue'))
 ```
 
-# Apéndice 1 --- limpieza de datos {data-background=#000000}
+# Apéndice --- estructura de archivos {data-background=#000000}
 
-# Apéndice 2 --- estructura de archivos {data-background=#000000}
+```
+.
+├── css
+│   └── style.css <- formato de estilo
+├── data
+│   └── sales.csv <- datos
+├── out.Rmd       <- compila en el formato de salida
+├── out.html      <- presentación final
+└── src
+    ├── config.R  <- configuración
+    ├── data.R    <- limpieza de datos
+    ├── pkgs.R    <- librerías requeridas
+    └── plots.R   <- gráficas
+```
+

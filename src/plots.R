@@ -1,7 +1,8 @@
 source('src/data.R')
 
+# Ventas por días y por tienda (agregado y proporciones)
 sales <- data |>
-    drop_na() |>
+    drop_na() |> # para cada gráfico, elimina valores NA pues solo interesa la columna 'Total'
     group_by(date) |>
     ggplot() +
     geom_bar(aes(x = date,
@@ -17,56 +18,12 @@ sales <- data |>
     theme(legend.title = element_blank(),
           legend.position = 'top')
 
-weekly.A <- data |>
-    drop_na() |>
-    filter(weekday %in% week, Location == 'Tienda A') |>
-    group_by(weekday) |>
-    summarise(Sales = sum(Total) / weeks) |>
-    ggplot(aes(x = weekday,
-               y = Sales,
-               group = 1)) +
-    geom_line() +
-    scale_y_continuous(breaks = seq(0, 220000, by = 20000),
-                       labels = scales::dollar_format()) +
-    labs(x = NULL,
-         y = 'Ventas promedio',
-         title = 'Tienda A')
-
-weekly.B <- data |>
-    drop_na() |>
-    filter(weekday %in% week, Location == 'Tienda B') |>
-    group_by(weekday) |>
-    summarise(Sales = sum(Total) / weeks) |>
-    ggplot(aes(x = weekday,
-               y = Sales,
-               group = 1)) +
-    geom_line() +
-    scale_y_continuous(breaks = seq(0, 120000, by = 10000),
-                       labels = scales::dollar_format()) +
-    labs(x = NULL,
-         y = 'Ventas promedio',
-         title = 'Tienda B')
-
-weekly.C <- data |>
-    drop_na() |>
-    filter(weekday %in% week, Location == 'Tienda C') |>
-    group_by(weekday) |>
-    summarise(Sales = sum(Total) / weeks) |>
-    ggplot(aes(x = weekday,
-               y = Sales,
-               group = 1)) +
-    geom_line() +
-    scale_y_continuous(breaks = seq(0, 24000, by = 2000),
-                       labels = scales::dollar_format()) +
-    labs(x = NULL,
-         y = 'Ventas promedio',
-         title = 'Tienda C')
-
+# Plot de ventas por día de la semana
 weekly <- data |>
     drop_na() |>
     filter(weekday %in% week) |>
     group_by(weekday, Location) |>
-    summarise(Sales = sum(Total) / weeks) |>
+    summarise(Sales = sum(Total) / weeks) |> # Promedia el volumen total de ventas por semana para cada día
     ggplot() +
     geom_line(aes(
         x = weekday,
@@ -84,7 +41,7 @@ weekly <- data |>
 hourly <- data |>
     drop_na() |>
     group_by(hour, Location) |>
-    summarise(Sales = sum(Total) / days) |>
+    summarise(Sales = sum(Total) / days) |> # Promedia el volumen total de ventas por día para cada hora
     ggplot() +
     geom_line(aes(
         x = hour,
@@ -101,6 +58,7 @@ hourly <- data |>
           legend.position = 'top') +
     coord_polar()
 
+# Mismo procedimiento anterior, filtrando por día de la semana
 hourly_daily <- function (x) {
     data |>
         drop_na() |>
@@ -125,13 +83,11 @@ hourly_daily <- function (x) {
         coord_polar()
 }
 
+# Aplica la función construida sobre cada día de la semana
 hourly.per.day <- lapply(week, hourly_daily)
 
-# weekly.A / weekly.B / weekly.C
-# sales
-# weekly
-# hourly
-
+# Une en un solo gráfico los resultados entre semana
 hourly.workdays <- (hourly.per.day[[1]] + hourly.per.day[[2]]) /
     (hourly.per.day[[3]] + hourly.per.day[[4]])
+# Une en un solo gráfico los resultados en fin de semana
 hourly.weekend <- hourly.per.day[[5]] | hourly.per.day[[6]] | hourly.per.day[[7]]
